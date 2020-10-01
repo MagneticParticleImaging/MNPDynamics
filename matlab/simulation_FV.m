@@ -19,7 +19,9 @@ function [t, exp, y] = simulation_FV(B, t_vec, tr, varargin)
 %           tau_N: scalar, Neel relaxation time constant, usually defined as
 %               M_S*V_C/(2*alphha*gamma_tilde*k_B*T)
 %           alpha: damping coefficient, usually 0.1
-%           n: Neel easy axis, to be specified as a 3D column vector
+%           n: Neel easy axis, to be specified as a 3D column vector or a 
+%               function handle that returns a 3D column vector given a 1D 
+%               point in time
 %           beta: upwind interpolation parameters, 0 corresponds to central difference
 %               averaging of the advection term, 1 corresponds to taking
 %               the value of the upstream node, 0 < beta < 1 corresponds to

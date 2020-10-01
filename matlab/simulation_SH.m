@@ -21,7 +21,7 @@ function [t,exp,y] = simulation_SH(B, t_vec, mode, varargin)
 %               this is the maximum index l to be considered for Y^l_m, resulting
 %               in l(l+1) equations in the ODE system.
 %           n: Neel easy axis, to be specified as a 3D column vector
-%               p1 to p4: coefficients of the advection term. It takes the form
+%           p1 to p4: coefficients of the advection term. It takes the form
 %               p1* (H x m) + p2 (m x H) x m + p4 (n*m)n x m + p4 (n*m)(m x n)
 %               x m. These can be set explicitly; if not, they will be
 %               calculated with the other given or assumed parameters. Setting
