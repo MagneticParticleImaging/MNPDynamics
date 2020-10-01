@@ -1,5 +1,48 @@
 function [t, exp, y] = simulation_FV(B, t_vec, tr, varargin)
 
+% Returns the solution of the Neel rotation model for given parameters
+% using the Finite Volume method. For Brownian rotation, use the spherical
+% harmonics method.
+%       INPUTS:
+%       B: function of one scalar variable (time) that returns a 3D column
+%           vector, describes the magnetic field over time
+%       t_vec: vector of time points where the solution is to be evaluated
+%       tr: struct containing the information about the triangulation as
+%           returned by the FV_mesh script.
+%       (optional): struct containing parameters; if any are not provided,
+%           standard values are used.
+%          Possible parameters:
+%           M_S: Core magnetization of a particle
+%           D_core: Core diameter of a particle in meters
+%           Temp: Temperature in K
+%           kAnis: Neel anisotropy constant
+%           tau_N: scalar, Neel relaxation time constant, usually defined as
+%               M_S*V_C/(2*alphha*gamma_tilde*k_B*T)
+%           alpha: damping coefficient, usually 0.1
+%           n: Neel easy axis, to be specified as a 3D column vector
+%           beta: upwind interpolation parameters, 0 corresponds to central difference
+%               averaging of the advection term, 1 corresponds to taking
+%               the value of the upstream node, 0 < beta < 1 corresponds to
+%               a weighted sum of the two.
+%           p1 to p4: coefficients of the advection term. It takes the form
+%               p1* (H x m) + p2 (m x H) x m + p4 (n*m)n x m + p4 (n*m)(m x n)
+%               x m. These can be set explicitly; if not, they will be
+%               calculated with the other given or assumed parameters. Setting
+%               p1 and p3 to zero explicitly may speed up the computation
+%               significantly with little to no error made.
+%
+%       OUTPUTS:
+%       t: vector of time points where the solution was evaluated. Is equal
+%          to input t_vec if the integration of the ODE succeeded.
+%       exp: matrix of calculated mean magnetic moment.
+%           Dimension: length(t) x 3.
+%       y: complete probability distribution, given in terms of the mean
+%           value of the distribution on each triangle.
+%           Dimension: length(t) x (number of triangles) 
+
+
+
+
 k_B = 1.38064852e-23;
 gam_gyro=1.75*10^11;
 if nargin > 3

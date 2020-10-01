@@ -1,12 +1,11 @@
 clear
 %close all
 
-addpath('../../matlab')
+addpath('../matlab')
 
 % Choose whether Brownian or Neel relaxation is simulated
 %MODE = 'brown';
 MODE = 'neel';
-%MODE = 'brown';
 
 
 % CONSTANTS
@@ -55,7 +54,7 @@ B = @(t) 0.012*[sin(2*pi*f*t); 0*t;0*t];
 %B = @(t) 0.012*[sin(2*pi*f*t);0;0];
 
 tic;
-[t,exp,y] = simulation(B, t, MODE, params);
+[t,exp,y] = simulation_SH(B, t, MODE, params);
 time = toc;
 disp(strcat('Solving ODE system took',{' '},num2str(time),' seconds.'))
 xexp = exp(:,1);

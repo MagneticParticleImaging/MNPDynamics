@@ -1,29 +1,44 @@
-function [t,exp,y] = simulation(B, t_vec, mode, varargin)
-% Returns the solution of the Neel rotation model for given parameters.
+function [t,exp,y] = simulation_SH(B, t_vec, mode, varargin)
+% Returns the solution of the Brown or Neel rotation model for given parameters
+% using the expansion into spherical harmonics.
 %       INPUTS:
 %       B: function of one scalar variable (time) that returns a 3D column
 %           vector, describes the magnetic field over time
 %       t_vec: vector of time points where the solution is to be evaluated
+%       mode: string, either 'neel' or 'brown', determines if Brownian or
+%           Neel rotation is considered
 %       (optional): struct containing parameters; if any are not provided,
-%       standard values are used. Possible parameters:
+%           standard values are used.
+%          Possible parameters:
 %           M_S: Core magnetization of a particle
-%           D_core: Core diameter of a particle in m
+%           D_core: Core diameter of a particle in meters
 %           Temp: Temperature in K
 %           kAnis: Neel anisotropy constant
 %           tau_N: scalar, Neel relaxation time constant, usually defined as
-%              M_S*V_C/(2*alphha*gamma_tilde*k_B*T)
-%           alpha: damping coefficient, usually 0.1, can be chosen as Inf for
-%              faster computation and only small error
+%               M_S*V_C/(2*alphha*gamma_tilde*k_B*T)
+%           alpha: damping coefficient, usually 0.1
 %           N: Number of spherical harmonics to be considered. More precisely,
-%              this is the maximum index l to be considered for Y^l_m, resulting
-%              in l(l+1) equations in the ODE system.
+%               this is the maximum index l to be considered for Y^l_m, resulting
+%               in l(l+1) equations in the ODE system.
 %           n: Neel easy axis, to be specified as a 3D column vector
+%               p1 to p4: coefficients of the advection term. It takes the form
+%               p1* (H x m) + p2 (m x H) x m + p4 (n*m)n x m + p4 (n*m)(m x n)
+%               x m. These can be set explicitly; if not, they will be
+%               calculated with the other given or assumed parameters. Setting
+%               p1 and p3 to zero explicitly may speed up the computation
+%               significantly with little to no error made.
+%           RelTol: relative tolerance for the ODE solver. For more
+%               information, see the MATLAB documentation for the ode15s
+%               function.
 %
 %       OUTPUTS:
 %       t: vector of time points where the solution was evaluated. Is equal
 %          to input t_vec if the integration of the ODE succeeded.
 %       exp: matrix of calculated mean magnetic moment.
 %           Dimension: length(t) x 3.
+%       y: complete probability distribution, given in terms of spherical
+%           harmonic coefficients.
+%           Dimension: length(t) x (N+1)^2 
 
 if strcmp(mode,'neel')
     %% Neel

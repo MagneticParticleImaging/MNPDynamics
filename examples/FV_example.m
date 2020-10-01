@@ -2,8 +2,8 @@ clear
 close all
 tic
 
-addpath('../../matlab')
-load('../../matlab/FV_meshes/mesh_4.mat')
+addpath('../matlab')
+load('../matlab/FV_meshes/mesh_4.mat')
 
 params.kAnis = 11000;
 %params.n = [0;0;1];
@@ -16,23 +16,31 @@ params.p3 = 0;
 
 t = linspace(0,4/f, 1000);
 
-[t, yexp, y] = simulation_FV(B, t, tr, params);
+[t, exp, y] = simulation_FV(B, t, tr, params);
 
-total = zeros(size(t));
-for i=1:length(t)
-    total(i) = y(i,:)*tr.areas';
-end
-plot(t, total)
-figure
-plot(t, yexp)
-pause(1)
-figure
-plot(t(1:end-1), diff(yexp(:,3)))
+xexp = exp(:,1);
+yexp = exp(:,2);
+zexp = exp(:,3);
 
-% 
+figure
+subplot(1,2,1)
+plot(t, [xexp,yexp,zexp])
+legend({'$\bar{m}_x$','$\bar{m}_y$','$\bar{m}_z$'}, 'Interpreter','latex')
+subplot(1,2,2)
+dt = diff(t);
+dxdt = diff(xexp)./dt;
+dydt = diff(yexp)./dt;
+dzdt = diff(zexp)./dt;
+plot(t(1:end-1),[dxdt, dydt, dzdt]) 
+legend({'$\frac{\partial \bar{m}_x}{\partial t}$','$\frac{\partial \bar{m}_y}{\partial t}$','$\frac{\partial \bar{m}_z}{\partial t}$'}, 'Interpreter','latex')
+% Note: the result has to be multiplied by M_S*V_C to obtain the magnetic
+% moment
+
+% plot the probability distribution over time
+
 % figure
 % for i=1:length(t)
-%     trisurf(fMat, vMat(:,1), vMat(:,2), vMat(:,3), y(i,:), 'EdgeColor', 'none')
+%     trisurf(tr.fMat, tr.vMat(:,1), tr.vMat(:,2), tr.vMat(:,3), y(i,:), 'EdgeColor', 'none')
 %     title(num2str(i/length(t)))
 %     caxis([min(min(y)), max(max(y))]);
 %     colorbar()
