@@ -8,4 +8,6 @@ If Néel rotation with a time-dependent easy axis is of interest, the files cont
 
 A simple example is presented in the corresponding directory. The documentation of each function can be found in the form of comments directly in its source code. For computation, the function simulation.m for the spherical harmonic method and simulation_FV.m for the finite volume method are sufficient.
 
-A research article analyzing the performance and presenting applications of this method is in development.
+A research article analyzing the performance and presenting applications of this method is available as a preprint:
+
+https://arxiv.org/abs/2010.07772
