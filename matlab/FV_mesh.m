@@ -29,8 +29,8 @@
 clear
 close all
 
-depth_level = 5;
-
+depth_level = 7;
+%addpath('spheretri-master/')
 [vMat, fMat] = spheretribydepth(depth_level);
 % generate triangulation. vMat: coordinates for each vertex, size =  (number of
 % vertices x 3). fMat: connectivity list, indices of vertices that form a
@@ -68,7 +68,7 @@ for i=1:size(edges,1)
     edge_dist(i,2) = acos(centers(edgeAttachments(i,2),:)*mids(i,:)');
     
     h_ij = edge_dist(:,1)+edge_dist(:,2);
-    a_ijs = edge_dist(:,1)./(edge_dist(:,1)+edge_dist(:,2));
+    a_ijs = edge_dist(:,2)./(edge_dist(:,1)+edge_dist(:,2));
     
     m = mids(i,:)';
     edge = vMat(edges(i,2),:)-vMat(edges(i,1),:);
@@ -218,4 +218,4 @@ tr.tr2edge = tr2edge;
 tr.valcs = valcs;
 tr.vMat = vMat;
 
-save('FV_meshes/mesh_5.mat','tr');
+save('FV_meshes/mesh_7.mat','tr');
